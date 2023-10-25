@@ -1,43 +1,65 @@
-const express = require('express');
-let books = require("./booksdb.js");
-let isValid = require("./auth_users.js").isValid;
-let users = require("./auth_users.js").users;
+const express = require("express");
+const axios = require("axios"); // Import Axios for making HTTP requests
+const books = require("./booksdb.js");
 const public_users = express.Router();
 
-
-public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+// Task 10: Get the list of books available in the shop using Promise callbacks or async-await with Axios
+public_users.get("/", async (req, res) => {
+    try {
+        const response = await axios.get(
+            "http://localhost:5000/customer/books"
+        ); // Replace with your API endpoint
+        const bookList = response.data;
+        res.json(bookList);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
-// Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+// Task 11: Get book details based on ISBN using Promise callbacks or async-await with Axios
+public_users.get("/isbn/:isbn", async (req, res) => {
+    const isbn = req.params.isbn;
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/customer/books/isbn/${isbn}`
+        ); // Replace with your API endpoint
+        const bookDetails = response.data;
+        res.json(bookDetails);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
-// Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
- });
-  
-// Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+// Task 12: Get book details based on Author using Promise callbacks or async-await with Axios
+public_users.get("/author/:author", async (req, res) => {
+    const author = req.params.author;
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/customer/books/author/${author}`
+        ); // Replace with your API endpoint
+        const matchingBooks = response.data;
+        res.json(matchingBooks);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
-// Get all books based on title
-public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
-});
-
-//  Get book review
-public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+// Task 13: Get book details based on Title using Promise callbacks or async-await with Axios
+public_users.get("/title/:title", async (req, res) => {
+    const title = req.params.title;
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/customer/books/title/${title}`
+        ); // Replace with your API endpoint
+        const matchingBooks = response.data;
+        res.json(matchingBooks);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
 module.exports.general = public_users;
